@@ -38,6 +38,16 @@ bot.addListener('message', function(from, to, message){
     }
 });
 
+bot.addListener('message', function(from, to, message){
+    if( message.indexOf('international') > -1
+        )
+    {
+        bot.say(to, "https://github.com/balanced/balanced-api/issues?labels=international&page=1&state=open")
+    }
+});
+
+
+
 var mongojs = require('mongojs');
 var connection_string = bot_name;
 if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
@@ -49,7 +59,7 @@ if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
 }
 
 var db = mongojs(connection_string, ['scoreboard']);
-
+nen, Open Platform Advocate, R
 bot.addListener('message', function(from, to, message) {
     if(message.indexOf('++') > -1 ){
         var subject = message.slice(0,message.indexOf('++'));
