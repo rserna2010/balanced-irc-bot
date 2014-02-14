@@ -38,6 +38,47 @@ bot.addListener('message', function(from, to, message){
     }
 });
 
+var mongojs = require('mongojs');
+var connection_string = bot_name;
+if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
+    connection_string = process.env.OPENSHIFT_MONGODB_DB_USERNAME +
+        ":" +
+    process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@ + " +
+    process.env.OPENSHIFT_MONGODB_DB_HOST + "/" +
+    process.env.OPENSHIFT_APP_NAME;
+}
+
+var db = mongojs(connection_string, ['scoreboard']);
+
+bot.addListener('message', function(from, to, message) {
+    if(message.indexOf('++') > -1 ){
+        var subject = message.slice(0,message.indexOf('++'));
+        db.scoreboard.find({query: {name: subject}}).limit(1, function(err, doc) {
+            if( typeof(doc)=='object' && (doc instanceof Array) && doc[0] &&
+                doc[0].name){
+                db.scoreboard.update({name: subject}, {$inc:{score:1}},
+                    function(err) {
+                        bot.say(to, "score: " + ( 1 + doc[0].score));
+                    });
+            }else {
+                db.scoreboard.insert({name: subject, score:1}, function(err) {
+                    bot.say(to, "score: 1");
+                });
+            }
+        });
+    }
+ });
+
+bot.addListener('message', function(from, to, message) {
+        if(message.indexOf('scoreboard') > -1){
+            db.scoreboard.find().sort({score:-1}).limit(10).forEach(function(err, doc){
+                if (doc && doc.name && doc.score ) {
+                    bot.say(to, doc.name + ": " + doc.score);
+                }
+            });
+        }
+});
+
 
 var express = require('express');
 var fs      = require('fs');
