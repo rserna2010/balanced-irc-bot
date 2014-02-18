@@ -3,7 +3,7 @@
 var irc = require("irc");
 var bot_name = process.env.OPENSHIFT_APP_NAME || "ircbot";
 var bot = new irc.Client("chat.freenode.net", bot_name, {
-    channels: ['#rserna2010'],
+    channels: ['#rserna2010, ##rserna2010'],
     port: 8001,
     debug: true
 });
