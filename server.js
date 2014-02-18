@@ -9,8 +9,9 @@ var bot = new irc.Client("chat.freenode.net", bot_name, {
 });
 
 bot.addListener('message', function(from, to, message){
+    message = message.toLowerCase();
     if( message.indexOf('international') > -1
-        || message.indexOf('Canada') > -1
+        || message.indexOf('canada') > -1
         )
     {
         bot.say(to, "While Balanced can process international purchases, at the moment Balanced " +
@@ -23,9 +24,12 @@ bot.addListener('message', function(from, to, message){
 
 bot.addListener('message', function(from, to, message){
     if( message.indexOf('currency') > -1
+        || message.indexOf('currencies') > -1
+        || message.indexOf('US dollars') > -1
+        || message.indexOf('U.S. dollars') > -1
         )
     {
-        bot.say(to, "While Balanced can process international purchases, all transactions are settled" +
+        bot.say(to, "While Balanced can process international purchases, all transactions are settled " +
             "in U.S. dollars. We are currently working on introducing foreign currencies. You can follow " +
             "our progress here: https://github.com/balanced/balanced-api/issues/100")
     }
@@ -33,12 +37,15 @@ bot.addListener('message', function(from, to, message){
 
 bot.addListener('message', function(from, to, message){
     if( message.indexOf('error codes') > -1
+        || message.indexOf('error code') > -1
         )
     {
         bot.say(to, "You can see a list of all of our error codes here: " +
             "https://github.com/balanced/balanced-api/blob/master/errors.rst")
     }
 });
+
+
 
 
 var mongojs = require('mongojs');
