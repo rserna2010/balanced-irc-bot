@@ -9,43 +9,37 @@ var bot = new irc.Client("chat.freenode.net", bot_name, {
 });
 
 bot.addListener('message', function(from, to, message){
-    if(  message.indexOf("know any good jokes") > -1
-      || message.indexOf('good joke') > -1
-     ){
-        bot.say(to, "knock knock")
-        }
-
-})
-
-
-bot.addListener('message', function(from, to, message) {
-    if( message.indexOf('who is there?') > -1
-     || message.indexOf("who's there?") > -1
-     || message.indexOf("Who's there?") > -1
-     || message.indexOf('Who is there?') > -1
-     )
-    {
-        bot.say(to, 'Doris')
-    }
-});
-
-bot.addListener('message', function(from, to, message){
-    if( message.indexOf('Doris who??') > -1
-        || message.indexOf("doris who?") > -1
-        )
-    {
-        bot.say(to, "Doris locked, that's why i'm knocking!")
-    }
-});
-
-
-bot.addListener('message', function(from, to, message){
     if( message.indexOf('international') > -1
+        || message.indexOf('Canada') > -1
         )
     {
-        bot.say(to, "https://github.com/balanced/balanced-api/issues?labels=international&page=1&state=open")
+        bot.say(to, "While Balanced can process international purchases, at the moment Balanced " +
+            "only supports marketplaces registered in the U.S. with a U.S. bank. Payouts can also only " +
+            "be sent to U.S. bank accounts. International support is on the road map and you can follow " +
+            "our progress here: " +
+            "https://github.com/balanced/balanced-api/issues?labels=international&page=1&state=open")
     }
 });
+
+bot.addListener('message', function(from, to, message){
+    if( message.indexOf('currency') > -1
+        )
+    {
+        bot.say(to, "While Balanced can process international purchases, all transactions are settled" +
+            "in U.S. dollars. We are currently working on introducing foreign currencies. You can follow " +
+            "our progress here: https://github.com/balanced/balanced-api/issues/100")
+    }
+});
+
+bot.addListener('message', function(from, to, message){
+    if( message.indexOf('error codes') > -1
+        )
+    {
+        bot.say(to, "You can see a list of all of our error codes here: " +
+            "https://github.com/balanced/balanced-api/blob/master/errors.rst")
+    }
+});
+
 
 var mongojs = require('mongojs');
 var connection_string = bot_name;
@@ -56,38 +50,6 @@ if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
     process.env.OPENSHIFT_MONGODB_DB_HOST + "/" +
     process.env.OPENSHIFT_APP_NAME;
 }
-
-var db = mongojs(connection_string, ['scoreboard']);
-
-bot.addListener('message', function(from, to, message) {
-    if(message.indexOf('++') > -1 ){
-        var subject = message.slice(0,message.indexOf('++'));
-        db.scoreboard.find({query: {name: subject}}).limit(1, function(err, doc) {
-            if( typeof(doc)=='object' && (doc instanceof Array) && doc[0] &&
-                doc[0].name){
-                db.scoreboard.update({name: subject}, {$inc:{score:1}},
-                    function(err) {
-                        bot.say(to, "score: " + ( 1 + doc[0].score));
-                    });
-            }else {
-                db.scoreboard.insert({name: subject, score:1}, function(err) {
-                    bot.say(to, "score: 1");
-                });
-            }
-        });
-    }
- });
-
-bot.addListener('message', function(from, to, message) {
-        if(message.indexOf('scoreboard') > -1){
-            db.scoreboard.find().sort({score:-1}).limit(10).forEach(function(err, doc){
-                if (doc && doc.name && doc.score ) {
-                    bot.say(to, doc.name + ": " + doc.score);
-                }
-            });
-        }
-});
-
 
 var express = require('express');
 var fs      = require('fs');
