@@ -23,10 +23,11 @@ bot.addListener('message', function(from, to, message){
 });
 
 bot.addListener('message', function(from, to, message){
+    message = message.toLowerCase();
     if( message.indexOf('currency') > -1
         || message.indexOf('currencies') > -1
-        || message.indexOf('US dollars') > -1
-        || message.indexOf('U.S. dollars') > -1
+        || message.indexOf('us dollars') > -1
+        || message.indexOf('u.s. dollars') > -1
         )
     {
         bot.say(to, "While Balanced can process international purchases, all transactions are settled " +
@@ -36,6 +37,7 @@ bot.addListener('message', function(from, to, message){
 });
 
 bot.addListener('message', function(from, to, message){
+    message = message.toLowerCase();
     if( message.indexOf('error codes') > -1
         || message.indexOf('error code') > -1
         )
