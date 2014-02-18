@@ -47,6 +47,19 @@ bot.addListener('message', function(from, to, message){
     }
 });
 
+bot.addListener('message', function(from, to, message){
+    message = message.toLowerCase();
+    if( message.indexOf('phone') > -1
+        || message.indexOf('phone call') > -1
+        || message.indexOf('schedule a call') > -1
+        || message.indexOf('phone number') > -1
+        )
+    {
+        bot.say(to, "To schedule a call with a Balanced rep please email " +
+            "support@balancedpayments.com. They will connect you with the appropriate " +
+            "person. We primarily handle integration related issues on IRC.")
+    }
+});
 
 
 
