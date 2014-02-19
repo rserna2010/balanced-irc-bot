@@ -1,5 +1,4 @@
 #!/bin/env node
-//  OpenShift sample Node application
 var irc = require("irc");
 var bot_name = process.env.OPENSHIFT_APP_NAME || "ircbot";
 var bot = new irc.Client("chat.freenode.net", bot_name, {
@@ -52,6 +51,7 @@ bot.addListener('message', function(from, to, message){
     if( message.indexOf('phone') > -1
         || message.indexOf('phone call') > -1
         || message.indexOf('schedule a call') > -1
+        || message.indexOf('scheduling a call') > -1
         || message.indexOf('phone number') > -1
         )
     {
@@ -61,6 +61,11 @@ bot.addListener('message', function(from, to, message){
     }
 });
 
+
+bot.addListener('message', function(from, to, message){
+    message_timestamp = new Date().getTime();
+        bot.say(" " + message_timestamp + " ")
+});
 
 
 var mongojs = require('mongojs');
