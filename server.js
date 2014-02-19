@@ -46,14 +46,12 @@ bot.addListener('message', function(from, to, message){
     }
 });
 
+
+
+
 bot.addListener('message', function(from, to, message){
     message = message.toLowerCase();
-    if( message.indexOf('phone') > -1
-        || message.indexOf('phone call') > -1
-        || message.indexOf('schedule a call') > -1
-        || message.indexOf('scheduling a call') > -1
-        || message.indexOf('phone number') > -1
-        )
+    if( message
     {
         bot.say(to, "To schedule a call with a Balanced rep please email " +
             "support@balancedpayments.com. They will connect you with the appropriate " +
@@ -64,7 +62,10 @@ bot.addListener('message', function(from, to, message){
 
 bot.addListener('message', function(from, to, message){
     message_timestamp = new Date().getTime();
+    if (message)
+    {
         bot.say(" " + message_timestamp + " ")
+    }
 });
 
 
